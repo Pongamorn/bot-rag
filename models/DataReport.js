@@ -14,6 +14,14 @@ const data_report = sequelize.define("data_report", {
     type: DataTypes.TEXT,
     allowNull: true,
   },
+  user_id: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  group_id: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
 });
 
 export default data_report;

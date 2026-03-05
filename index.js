@@ -27,13 +27,14 @@ app.post("/webhook", async (req, res) => {
   const userId = event.source.userId;
 
   // 1. Command Guard
-  const allowed = await checkPermission(groupId, userId);
-  if (!allowed) {
-    return res.sendStatus(200);
-  }
-  if (groupId === "Cea304ea2f60c5dda2e123dd62e00a10e") {
-    console.log("Received message:", { text, groupId, userId });
-  }
+  // const allowed = await checkPermission(groupId, userId);
+  // if (!allowed) {
+  //   return res.sendStatus(200);
+  // }
+  // if (groupId === "Cea304ea2f60c5dda2e123dd62e00a10e") {
+  //   console.log("Received message:", { text, groupId, userId });
+  // }
+  console.log(groupId, userId);
 
   if (!sessions[userId]) {
     sessions[userId] = { waitingIntent: false, step: "waiting_topic" };
@@ -97,11 +98,25 @@ app.post("/webhook", async (req, res) => {
     }
 
     const comment = text;
-    await data_report.create({ topic, comment });
-    sessions[userId].waitingIntent = false;
-    sessions[userId].step = "waiting_topic";
-    await reply(event.replyToken, `น้องเต่าบันทึกเรื่องเรียบร้อยแล้ว!`);
-    return res.sendStatus(200);
+    try {
+      await data_report.create({
+        topic,
+        comment,
+        user_id: userId,
+        group_id: groupId,
+      });
+      sessions[userId].waitingIntent = false;
+      sessions[userId].step = "waiting_topic";
+      await reply(event.replyToken, `น้องเต่าบันทึกเรื่องเรียบร้อยแล้ว!`);
+      return res.sendStatus(200);
+    } catch (error) {
+      console.error("Failed to save report:", error);
+      await reply(
+        event.replyToken,
+        `น้องเต่าพบปัญหาในการบันทึกข้อมูลครับ ลองใหม่อีกครั้งนะครับ`,
+      );
+      return res.sendStatus(200);
+    }
   } else {
     return res.sendStatus(200);
   }

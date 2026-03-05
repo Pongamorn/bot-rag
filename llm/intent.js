@@ -29,7 +29,6 @@ export async function parseIntent(text) {
 - ถ้าผู้ใช้แจ้งว่า กล้องเปิดไม่ได้/กล้องเป็นสีดำ/กล้องเปิดไม่ติด → {"intent":"กล้องเปิดไม่ได้","response_again":false, "cancel": false}
 - ถ้าผู้ใช้แจ้งว่า application ของลูกค้าขึ้นว่าไม่อนุมัติ/ไม่อนุมัติ/คำร้องไม่อนุมัติ → {"intent":"ไม่อนุมัติ","response_again":false, "cancel": false}
 
-
 - ถ้าไม่เกี่ยวข้องกับระบบ ให้ตอบกลับเป็นข้อความปกติตามบริบทของผู้ใช้ {"intent": "ผมไม่เข้าใจคำสั่งของคุณ","response_again":true , "cancel": false}
 - ถ้าผู้ใช้แจ้งว่า "ยกเลิก" หรือ "ไม่เอาแล้ว" ให้ตอบกลับว่า {"intent": "ยกเลิกการสั่งงาน","response_again":false, "cancel": true}
 ห้ามอธิบายเพิ่มเติม
