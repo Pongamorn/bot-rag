@@ -5,6 +5,6 @@ services:
     build: .
     container_name: rag-bot
     ports:
-      - "3000:5010"
+      - "5010:3000"
     env_file:
       - .env
