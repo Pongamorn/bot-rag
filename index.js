@@ -6,19 +6,22 @@ import { reply } from "./util/reply.js";
 import sequelize from "./config/db.js";
 import data_report from "./models/DataReport.js";
 import reportBot from "./models/reportBot.js";
-import userRouter from "./routes/getimage.js";
+import botReportRoute from "./routes/botReportRoute.js";
 import axios from "axios";
 import { analyzeImage } from "./llm/analyzeImage.js";
 import { uploadImage } from "./util/uploadImage.js";
+import cors from "cors";
 
 const app = express();
+
 app.use(bodyParser.json());
+app.use(cors());
 
 app.get("/", (req, res) => {
   res.send("Hello, World!");
 });
 
-app.use("/api", userRouter);
+app.use("/api", botReportRoute);
 
 const sessions = {};
 app.post("/webhook", async (req, res) => {
