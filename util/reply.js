@@ -1,9 +1,19 @@
 import fetch from "node-fetch";
 import dotenv from "dotenv";
+import { quickReplyItems } from "../quickReply/quickReply.js";
 dotenv.config();
 
-export async function reply(replyToken, message) {
-  console.log("Replying with message:", message);
+export async function reply(replyToken, message, isQuickReplyItems) {
+  let replyMessage = {
+    type: "text",
+    text: message,
+  };
+
+  if (isQuickReplyItems) {
+    replyMessage.quickReply = {
+      items: quickReplyItems,
+    };
+  }
 
   try {
     const response = await fetch("https://api.line.me/v2/bot/message/reply", {
@@ -14,12 +24,7 @@ export async function reply(replyToken, message) {
       },
       body: JSON.stringify({
         replyToken: replyToken,
-        messages: [
-          {
-            type: "text",
-            text: message,
-          },
-        ],
+        messages: [replyMessage],
       }),
     });
 
