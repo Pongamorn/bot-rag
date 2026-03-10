@@ -103,8 +103,23 @@ app.post("/webhook", async (req, res) => {
           const base64Image = Buffer.from(image.data).toString("base64");
           const result = await analyzeImage(base64Image);
 
-          console.log("Analysis result:", result);
-          reply(event.replyToken, `ผลวิเคราะห์ภาพ: ${result}`);
+          try {
+            const imageUrl = await uploadImage(
+              base64Image,
+              `image_${Date.now()}.jpg`,
+            );
+
+            await reportBot.create({
+              topic: result,
+              group_id: groupId,
+              user_id: userId,
+              image_url: imageUrl,
+              image_name: `image_${Date.now()}.jpg`,
+            });
+          } catch (error) {
+            console.error("Failed to save report:", error);
+            return res.sendStatus(200);
+          }
 
           return res.sendStatus(200);
         }
